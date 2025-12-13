@@ -34,21 +34,9 @@ const Login = () => {
     }
   };
 
-  const handleGoogleLogin = async () => {
-    try {
-      setIsLoading(true);
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: window.location.origin + "/auth/callback"
-        }
-      });
-      if (error) throw error;
-    } catch (error) {
-      alert(error.message);
-    } finally {
-      setIsLoading(false);
-    }
+  const handleGoogleLogin = () => {
+    console.log("Google button clicked, navigating to signup");
+    navigate("/signup");
   };
 
   return (
@@ -76,7 +64,7 @@ const Login = () => {
                 disabled={isLoading}
               >
                 <FcGoogle className="w-5 h-5" />
-                {isLoading ? 'Signing in...' : 'Continue with Google'}
+                {isLoading ? 'Redirecting...' : 'Continue with Google'}
               </Button>
 
               {/* Localhost-only Email/Password Login */}

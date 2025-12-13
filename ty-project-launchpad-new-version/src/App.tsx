@@ -9,7 +9,7 @@ import useScrollToTop from "./hooks/useScrollToTop";
 import Index from "./pages/Index";
 import Projects from "./pages/Projects";
 import PastWork from "./pages/PastWork";
-import Login from "./pages/LoginLocal";
+import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import IdeaGenerator from "./pages/IdeaGenerator";
 import ApprovedIdeaPage from "./pages/ApprovedIdeaPage";
