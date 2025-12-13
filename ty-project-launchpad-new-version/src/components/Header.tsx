@@ -120,10 +120,7 @@ const Header = () => {
                   </div>
                   
                   <div className="py-1">
-                    <button onClick={() => handleProfileNavigation('/profile')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2">
-                      <UserIcon size={14} /><span>My Profile</span>
-                    </button>
-                    <button onClick={() => handleProfileNavigation('/dashboard')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2">
+                                        <button onClick={() => handleProfileNavigation('/dashboard')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2">
                       <UserIcon size={14} /><span>Dashboard</span>
                     </button>
                     <button onClick={() => handleProfileNavigation('/orders')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2">

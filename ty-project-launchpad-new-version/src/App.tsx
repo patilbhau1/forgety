@@ -25,7 +25,6 @@ import Contact from "./pages/Contact";
 import PlanSelection from "./pages/PlanSelection";
 import ProjectSetup from "./pages/ProjectSetup";
 import RequestAdminHelp from "./pages/RequestAdminHelp";
-import Profile from "./pages/Profile";
 
 const queryClient = new QueryClient();
 
@@ -54,8 +53,7 @@ const AppContent = () => {
           <Route path="/select-plan" element={<PlanSelection />} />
           <Route path="/project-setup" element={<ProjectSetup />} />
           <Route path="/request-admin-help" element={<RequestAdminHelp />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="*" element={<NotFound />} />
+                    <Route path="*" element={<NotFound />} />
         </Routes>
         <BottomNavigation />
       </>

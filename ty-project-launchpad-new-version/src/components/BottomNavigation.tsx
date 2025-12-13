@@ -29,7 +29,7 @@ const BottomNavigation = () => {
       icon: Phone,
     },
     {
-      name: 'Profile',
+      name: 'Dashboard',
       path: '/dashboard',
       icon: User,
     },
