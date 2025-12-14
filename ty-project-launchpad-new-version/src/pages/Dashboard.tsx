@@ -18,6 +18,7 @@ import {
   FileText,
   Package
 } from "lucide-react";
+import { supabase } from '@/integrations/supabase/client';
 
 const API_BASE = "https://newtyforge.onrender.com/api";
 
@@ -86,29 +87,7 @@ const Dashboard = () => {
     fetchUser();
   }, []);
 
-  const stats = {
-    projectsCompleted: 2,
-    activeProjects: 1,
-    totalSpent: "₹14,000"
-  };
-
-  const recentProjects = [
-    {
-      id: 1,
-      name: "E-commerce Platform",
-      status: "Completed",
-      type: "Software",
-      date: "Jan 2024"
-    },
-    {
-      id: 2,
-      name: "IoT Smart Home",
-      status: "In Progress", 
-      type: "Hardware",
-      date: "Feb 2024"
-    }
-  ];
-
+  
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'Completed': return 'bg-green-100 text-green-800';
@@ -240,28 +219,6 @@ const Dashboard = () => {
             </div>
           </CardContent>
         </Card>
-
-        {/* Quick Stats */}
-        <div className="grid grid-cols-3 gap-4 mb-6">
-          <Card className="text-center">
-            <CardContent className="p-4">
-              <div className="text-2xl font-bold text-blue-600">{stats.projectsCompleted}</div>
-              <p className="text-sm text-gray-600">Completed</p>
-            </CardContent>
-          </Card>
-          <Card className="text-center">
-            <CardContent className="p-4">
-              <div className="text-2xl font-bold text-green-600">{stats.activeProjects}</div>
-              <p className="text-sm text-gray-600">Active</p>
-            </CardContent>
-          </Card>
-          <Card className="text-center">
-            <CardContent className="p-4">
-              <div className="text-2xl font-bold text-purple-600">{stats.totalSpent}</div>
-              <p className="text-sm text-gray-600">Total Spent</p>
-            </CardContent>
-          </Card>
-        </div>
 
         {/* My Orders */}
         <Card className="mb-6">
