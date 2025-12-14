@@ -682,9 +682,11 @@ async def update_profile(profile_data: ProfileUpdate, current_user: dict = Depen
     update_user_profile(current_user["id"], profile_data.name, profile_data.phone)
     return {"message": "Profile updated successfully"}
 
-@app.route('/' , methods=['GET' , 'HEAD' ])
-def health_check():
+@app.get("/")
+async def root():
     return {"message": "running backend"}
+
+    
 
 # Initialize DB
 init_db()
