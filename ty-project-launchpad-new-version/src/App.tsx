@@ -108,12 +108,17 @@ const AppContent = () => {
     <>
       <Routes>
         {/* Public routes */}
+        <Route path="/" element={<Index />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/auth/callback" element={<AuthCallback />} />
+        <Route path="/projects" element={<Projects />} />
+        <Route path="/past-work" element={<PastWork />} />
+        <Route path="/idea-generator" element={<IdeaGenerator />} />
+        <Route path="/contact" element={<Contact />} />
         
         {/* Protected routes */}
-        <Route path="/" element={
+        <Route path="/dashboard" element={
           <ProtectedRoute>
             <Dashboard />
           </ProtectedRoute>
@@ -130,12 +135,6 @@ const AppContent = () => {
             }
           />
         ))}
-        
-        {/* Public routes that should be accessible after login */}
-        <Route path="/projects" element={<Projects />} />
-        <Route path="/past-work" element={<PastWork />} />
-        <Route path="/idea-generator" element={<IdeaGenerator />} />
-        <Route path="/contact" element={<Contact />} />
         
         <Route path="*" element={<NotFound />} />
       </Routes>
