@@ -22,7 +22,7 @@ import {
 const API_BASE = "http://localhost:8000/api";
 
 // Helper: Get JWT token from localStorage
-const getToken = () => localStorage.getItem("tyforge_token");
+const getToken = () => localStorage.getItem("token");
 
 // Helper: API call with auth
 const apiCall = async (endpoint: string, options: any = {}) => {

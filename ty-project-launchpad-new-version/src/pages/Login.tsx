@@ -3,41 +3,51 @@ import Footer from "@/components/Footer";
 import { FcGoogle } from "react-icons/fc";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Login = () => {
-  const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const { login, isLoading, user } = useAuth();
   const navigate = useNavigate();
-
-  // Show email login only on localhost
-  const isLocalhost = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+  const location = useLocation();
 
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
     try {
-      setIsLoading(true);
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      console.log("Manual login response:", { data, error });
-      if (error) throw error;
-      navigate("/dashboard");
+      const success = await login(email, password);
+      if (success) {
+        console.log('Login successful, checking for redirect');
+        // Get the redirect location from the route state or default to '/dashboard'
+        const from = location.state?.from?.pathname || '/dashboard';
+        console.log('Redirecting to:', from);
+        navigate(from, { replace: true });
+      }
     } catch (error: any) {
-      alert("Login failed: " + error.message);
-    } finally {
-      setIsLoading(false);
+      console.error('Login error:', error);
+      const errorMessage = error.response?.data?.detail || error.message || 'Login failed';
+      setError(errorMessage);
     }
   };
 
   const handleGoogleLogin = () => {
-    console.log("Google button clicked, navigating to signup");
+    // For now, redirect to signup page
+    // You can implement Google OAuth with your backend later if needed
     navigate("/signup");
   };
+
+  // Show loading state only when checking initial auth state
+  if (isLoading && !user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -67,83 +77,45 @@ const Login = () => {
                 {isLoading ? 'Redirecting...' : 'Continue with Google'}
               </Button>
 
-              {/* Localhost-only Email/Password Login */}
-              {isLocalhost && (
-                <>
-                  <div className="relative">
-                    <div className="absolute inset-0 flex items-center">
-                      <span className="w-full border-t" />
-                    </div>
-                    <div className="relative flex justify-center text-xs uppercase">
-                      <span className="bg-white px-2 text-gray-500">Or test with email</span>
-                    </div>
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-white px-2 text-gray-500">Or login with email</span>
+                </div>
+              </div>
+
+              <form onSubmit={handleEmailLogin} className="space-y-3">
+                <input
+                  type="email"
+                  placeholder="Email address"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full px-3 py-2 border rounded-lg"
+                  required
+                />
+                <input
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-3 py-2 border rounded-lg"
+                  required
+                />
+                {error && (
+                  <div className="text-red-500 text-sm text-center">
+                    {error}
                   </div>
-
-                  <form onSubmit={handleEmailLogin} className="space-y-3">
-                    <input
-                      type="email"
-                      placeholder="test@example.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="w-full px-3 py-2 border rounded-lg"
-                      required
-                    />
-                    <input
-                      type="password"
-                      placeholder="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="w-full px-3 py-2 border rounded-lg"
-                      required
-                    />
-                    <Button type="submit" className="w-full" disabled={isLoading}>
-                      {isLoading ? 'Logging in...' : 'Login with Email'}
-                    </Button>
-
-                    {/* Auto Test Login Button */}
-                    <Button
-                      type="button"
-                      variant="secondary"
-                      className="w-full"
-                      onClick={async () => {
-                        setEmail("test@tyforge.local");
-                        setPassword("test123456");
-                        // Auto-login after fill
-                        setTimeout(async () => {
-                          try {
-                            setIsLoading(true);
-                            const { data, error } = await supabase.auth.signInWithPassword({
-                              email: "test@tyforge.local",
-                              password: "test123456",
-                            });
-                            console.log("Login response:", { data, error });
-                            if (error) {
-                              // If login fails, try to create the user
-                              console.log("Login failed, trying to create user...");
-                              const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-                                email: "test@tyforge.local",
-                                password: "test123456",
-                              });
-                              console.log("Sign up response:", { signUpData, signUpError });
-                              if (signUpError) throw signUpError;
-                              alert("Test user created! Please click login again.");
-                            } else {
-                              navigate("/dashboard");
-                            }
-                          } catch (error: any) {
-                            alert("Login/Signup failed: " + error.message);
-                          } finally {
-                            setIsLoading(false);
-                          }
-                        }, 100);
-                      }}
-                      disabled={isLoading}
-                    >
-                      🚀 Test Login (Auto-fill & Go)
-                    </Button>
-                  </form>
-                </>
-              )}
+                )}
+                <Button 
+                  type="submit" 
+                  className="w-full" 
+                  disabled={isLoading}
+                >
+                  {isLoading ? 'Logging in...' : 'Login with Email'}
+                </Button>
+              </form>
             </CardContent>
           </Card>
         </div>
