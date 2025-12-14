@@ -5,7 +5,7 @@ import { Package } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const API_BASE = "https://newtyforge.onrender.com/api";
-const getToken = () => localStorage.getItem("tyforge_token");
+const getToken = () => localStorage.getItem("token");
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
