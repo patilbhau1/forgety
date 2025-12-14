@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import Header from "@/components/Header";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,15 +7,13 @@ import {
   User as UserIcon, 
   Mail, 
   Phone, 
-  Calendar,
   Settings,
-  LogOut,
+  Calendar,
   Edit3,
   Upload,
   Download,
   Book,
   Video,
-  FileText,
   Package
 } from "lucide-react";
 import { supabase } from '@/integrations/supabase/client';
@@ -168,6 +166,39 @@ const Dashboard = () => {
     }
   };
 
+  const handleSaveProfile = async () => {
+    try {
+      const token = getToken();
+      const response = await fetch(`${API_BASE}/update-profile`, {
+        method: "PUT",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: userProfile.name,
+          phone: userProfile.phone
+        }),
+      });
+
+      if (!response.ok) throw new Error("Failed to update profile");
+      
+      setIsEditing(false);
+      alert("Profile updated successfully!");
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      alert("Failed to update profile. Please try again.");
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setUserProfile(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       <Header />
@@ -193,7 +224,7 @@ const Dashboard = () => {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setIsEditing(!isEditing)}
+              onClick={isEditing ? handleSaveProfile : () => setIsEditing(true)}
               className="flex items-center gap-2"
             >
               <Edit3 className="w-4 h-4" />
@@ -201,22 +232,78 @@ const Dashboard = () => {
             </Button>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="flex items-center gap-3">
-                <Mail className="w-5 h-5 text-gray-500" />
-                <div>
-                  <p className="text-sm text-gray-600">Email</p>
-                  <p className="font-medium">{userProfile.email}</p>
+            {isEditing ? (
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <UserIcon className="w-5 h-5 text-gray-500 flex-shrink-0" />
+                  <div className="w-full">
+                    <label className="block text-sm font-medium text-gray-600 mb-1">Name</label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={userProfile.name}
+                      onChange={handleInputChange}
+                      className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Mail className="w-5 h-5 text-gray-500 flex-shrink-0" />
+                  <div className="w-full">
+                    <label className="block text-sm font-medium text-gray-600 mb-1">Email</label>
+                    <p className="text-gray-900 p-2 bg-gray-50 rounded">
+                      {userProfile.email}
+                    </p>
+                    <p className="text-xs text-gray-500 mt-1">Email cannot be changed</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Phone className="w-5 h-5 text-gray-500 flex-shrink-0" />
+                  <div className="w-full">
+                    <label className="block text-sm font-medium text-gray-600 mb-1">Phone</label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={userProfile.phone}
+                      onChange={handleInputChange}
+                      placeholder="+91 9876543210"
+                      className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
                 </div>
               </div>
-              <div className="flex items-center gap-3">
-                <Phone className="w-5 h-5 text-gray-500" />
-                <div>
-                  <p className="text-sm text-gray-600">Phone</p>
-                  <p className="font-medium">{userProfile.phone}</p>
+            ) : (
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="flex items-start gap-3">
+                  <UserIcon className="w-5 h-5 text-gray-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="text-sm text-gray-600">Name</p>
+                    <p className="font-medium">{userProfile.name}</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Mail className="w-5 h-5 text-gray-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="text-sm text-gray-600">Email</p>
+                    <p className="font-medium">{userProfile.email}</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Phone className="w-5 h-5 text-gray-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="text-sm text-gray-600">Phone</p>
+                    <p className="font-medium">{userProfile.phone || 'Not provided'}</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Calendar className="w-5 h-5 text-gray-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="text-sm text-gray-600">Member since</p>
+                    <p className="font-medium">{userProfile.joinedDate}</p>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </CardContent>
         </Card>
 
