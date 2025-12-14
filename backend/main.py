@@ -418,10 +418,10 @@ def create_meeting(user_id: str, scheduled_at: str, notes: str = ""):
 
 app = FastAPI(title="TyForge Local API", version="1.0.0")
 
-# CORS for React
+# CORS for all origins
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8080", "http://127.0.0.1:8080"],
+    allow_origins=["*"],  # Allow all origins
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
