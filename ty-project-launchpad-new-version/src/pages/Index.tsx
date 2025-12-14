@@ -230,44 +230,61 @@ const Index = () => {
   ];
 
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
-  const [hasAnimated, setHasAnimated] = useState(() => {
-    return sessionStorage.getItem('heroAnimationPlayed') === 'true';
-  });
-
   const h1Controls = useAnimation();
   const pControls = useAnimation();
   const buttonControls = useAnimation();
-  const buttonInnerControls = useAnimation(); // For the inner motion.div of the button
+  const buttonInnerControls = useAnimation();
 
   useEffect(() => {
-    // Check if animations have already played in this session
-    const animationPlayed = sessionStorage.getItem('heroAnimationPlayed');
+    const sequence = async () => {
+      // Reset all animations
+      await h1Controls.start("hidden");
+      await pControls.start({ opacity: 0, y: 20 });
+      await buttonControls.start({ opacity: 0 });
+      await buttonInnerControls.start({ width: 0 });
+      
+      // Animate h1 characters
+      await h1Controls.start("visible");
+      
+      // Animate paragraph
+      await pControls.start({ 
+        opacity: 1, 
+        y: 0, 
+        transition: { 
+          duration: 0.5,
+          ease: "easeOut"
+        } 
+      });
+
+      // Animate button container
+      await buttonControls.start({ 
+        opacity: 1, 
+        transition: { 
+          duration: 0.5,
+          ease: "easeOut"
+        } 
+      });
+
+      // Animate button inner div
+      await buttonInnerControls.start({ 
+        width: "100%", 
+        transition: { 
+          duration: 0.6, 
+          ease: "easeInOut" 
+        } 
+      });
+    };
     
-    if (animationPlayed) {
-      // Skip animations and show content immediately
-      setHasAnimated(true);
-    } else {
-      // Play animations and mark as played for this session
-      const sequence = async () => {
-        // Animate h1 characters
-        await h1Controls.start("visible");
-
-        // Animate paragraph
-        await pControls.start({ opacity: 1, y: 0, transition: { delay: 0.15, duration: 0.4 } });
-
-        // Animate button container
-        await buttonControls.start({ opacity: 1, transition: { delay: 0.6, duration: 0.4 } });
-
-        // Animate button inner div
-        await buttonInnerControls.start({ width: "100%", transition: { delay: 0.08, duration: 0.4, ease: "easeInOut" } });
-        
-        // Mark animations as completed for this session
-        setHasAnimated(true);
-        sessionStorage.setItem('heroAnimationPlayed', 'true');
-      };
-
-      sequence();
-    }
+    // Start the animation sequence
+    sequence();
+    
+    // Cleanup function to reset animations when component unmounts
+    return () => {
+      h1Controls.stop();
+      pControls.stop();
+      buttonControls.stop();
+      buttonInnerControls.stop();
+    };
   }, [h1Controls, pControls, buttonControls, buttonInnerControls]);
 
   return (
@@ -280,11 +297,17 @@ const Index = () => {
           <div className="text-center max-w-4xl mx-auto">
             <motion.h1
               className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold text-gray-900 mb-4 sm:mb-6 leading-tight"
-              initial={hasAnimated ? "visible" : "hidden"}
-              animate={hasAnimated ? "visible" : h1Controls}
+              initial="hidden"
+              animate={h1Controls}
               variants={{
-                visible: { transition: { staggerChildren: 0.05 } },
-                hidden: {},
+                hidden: { opacity: 0 },
+                visible: { 
+                  opacity: 1,
+                  transition: { 
+                    staggerChildren: 0.05,
+                    when: "beforeChildren"
+                  } 
+                },
               }}
             >
               {"Final Year Projects? That's What We Do Best.".split("").map((char, index) => (
@@ -298,14 +321,14 @@ const Index = () => {
             </motion.h1>
             <motion.p
               className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 mb-6 sm:mb-8 max-w-3xl mx-auto px-2 leading-relaxed"
-              initial={hasAnimated ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              animate={hasAnimated ? { opacity: 1, y: 0 } : pControls}
+              initial={{ opacity: 0, y: 20 }}
+              animate={pControls}
             >
               We're here to make your final year project stress‑free. Whether you're stuck on ideas or need help bringing them to life, we'll guide you every step of the way—without breaking the bank.
             </motion.p>
             <motion.div
-              initial={hasAnimated ? { opacity: 1 } : { opacity: 0 }}
-              animate={hasAnimated ? { opacity: 1 } : buttonControls}
+              initial={{ opacity: 0 }}
+              animate={buttonControls}
             >
               <Link to="/choose-idea-path">
                 <Button
@@ -314,8 +337,8 @@ const Index = () => {
                 >
                   <motion.div
                     className="absolute inset-0 bg-blue-600"
-                    initial={hasAnimated ? { width: "100%" } : { width: 0 }}
-                    animate={hasAnimated ? { width: "100%" } : buttonInnerControls}
+                    initial={{ width: 0 }}
+                    animate={buttonInnerControls}
                   />
                   <span className="relative z-10 flex items-center justify-center font-semibold">
                     Get Started
