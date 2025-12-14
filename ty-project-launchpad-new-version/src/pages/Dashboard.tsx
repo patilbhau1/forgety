@@ -19,7 +19,7 @@ import {
   Package
 } from "lucide-react";
 
-const API_BASE = "http://localhost:8000/api";
+const API_BASE = "https://newtyforge.onrender.com/api";
 
 // Helper: Get JWT token from localStorage
 const getToken = () => localStorage.getItem("token");

@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Package } from "lucide-react";
 import { useEffect, useState } from "react";
 
-const API_BASE = "http://localhost:8000/api";
+const API_BASE = "https://newtyforge.onrender.com/api";
 const getToken = () => localStorage.getItem("tyforge_token");
 
 const Orders = () => {

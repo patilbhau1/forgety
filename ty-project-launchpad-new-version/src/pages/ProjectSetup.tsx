@@ -56,10 +56,10 @@ const ProjectSetup = () => {
 
     try {
       setIsProcessing(true);
-      const token = localStorage.getItem("tyforge_token");
+      const token = localStorage.getItem("token");
       
       // First create a project entry
-      const projectResponse = await fetch("http://localhost:8000/api/create-project-idea", {
+      const projectResponse = await fetch("https://newtyforge.onrender.com/api/create-project-idea", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -81,7 +81,7 @@ const ProjectSetup = () => {
       formData.append("file", uploadedFile);
       
       const uploadResponse = await fetch(
-        `http://localhost:8000/api/upload-synopsis/${projectData.project_id}`,
+        `https://newtyforge.onrender.com/api/upload-synopsis/${projectData.project_id}`,
         {
           method: "POST",
           headers: {
@@ -125,9 +125,9 @@ const ProjectSetup = () => {
 
     try {
       setIsProcessing(true);
-      const token = localStorage.getItem("tyforge_token");
+      const token = localStorage.getItem("token");
       
-      const response = await fetch("http://localhost:8000/api/create-project-idea", {
+      const response = await fetch("https://newtyforge.onrender.com/api/create-project-idea", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

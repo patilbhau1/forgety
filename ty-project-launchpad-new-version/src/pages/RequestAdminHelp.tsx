@@ -37,7 +37,7 @@ const RequestAdminHelp = () => {
       setIsProcessing(true);
       const token = localStorage.getItem("tyforge_token");
       
-      const response = await fetch("http://localhost:8000/api/request-admin-help", {
+      const response = await fetch("https://newtyforge.onrender.com/api/request-admin-help", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

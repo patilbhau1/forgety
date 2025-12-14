@@ -32,8 +32,8 @@ const PlanSelection = () => {
 
   const fetchPlans = async () => {
     try {
-      const token = localStorage.getItem("tyforge_token");
-      const response = await fetch("http://localhost:8000/api/plans", {
+      const token = localStorage.getItem("token");
+      const response = await fetch("https://newtyforge.onrender.com/api/plans", {
         headers: {
           "Authorization": `Bearer ${token}`,
         },
@@ -66,9 +66,9 @@ const PlanSelection = () => {
 
     try {
       setIsProcessing(true);
-      const token = localStorage.getItem("tyforge_token");
+      const token = localStorage.getItem("token");
       
-      const response = await fetch("http://localhost:8000/api/select-plan", {
+      const response = await fetch("https://newtyforge.onrender.com/api/select-plan", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
