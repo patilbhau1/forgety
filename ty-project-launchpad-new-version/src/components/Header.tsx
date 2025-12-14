@@ -1,40 +1,17 @@
 
 import { Button } from "@/components/ui/button";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X, ChevronDown, User as UserIcon, FileText, Package, Download, Calendar, Book } from "lucide-react";
+import { Menu, X, ChevronDown, User as UserIcon, FileText, Package, Calendar, Book } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { user, isAuthenticated, logout } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [user, setUser] = useState<any>(null);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      const token = localStorage.getItem("tyforge_token");
-      if (!token) return;
-
-      try {
-        const res = await fetch("https://newtyforge.onrender.com/api/me", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (res.ok) {
-          const userData = await res.json();
-          setUser(userData);
-        } else {
-          localStorage.removeItem("tyforge_token");
-        }
-      } catch (error) {
-        console.error("Failed to fetch user:", error);
-        localStorage.removeItem("tyforge_token");
-      }
-    };
-
-    fetchUser();
-  }, []);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -49,8 +26,7 @@ const Header = () => {
   }, []);
 
   const handleSignOut = async () => {
-    localStorage.removeItem("tyforge_token");
-    setUser(null);
+    logout();
     setIsProfileDropdownOpen(false);
     navigate("/");
   };
@@ -97,9 +73,9 @@ const Header = () => {
             ))}
           </nav>
 
-          {/* Profile Icon (Always Visible) */}
+          {/* Profile Section */}
           <div className="hidden md:flex items-center space-x-3">
-            {user ? (
+            {isAuthenticated && user ? (
               <div className="relative" ref={dropdownRef}>
                 <Button 
                   variant="ghost" 
@@ -149,18 +125,20 @@ const Header = () => {
               )}
             </div>
           ) : (
-            <div className="flex items-center space-x-3">
-              <Link to="/login">
-                <Button variant="ghost" size="sm">
-                  Log In
-                </Button>
-              </Link>
-              <Link to="/signup">
-                <Button size="sm" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white">
-                  Sign Up
-                </Button>
-              </Link>
-            </div>
+              !isAuthenticated && (
+                <div className="flex items-center space-x-3">
+                  <Link to="/login">
+                    <Button variant="ghost" size="sm">
+                      Log In
+                    </Button>
+                  </Link>
+                  <Link to="/signup">
+                    <Button size="sm" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white">
+                      Sign Up
+                    </Button>
+                  </Link>
+                </div>
+              )
           )}
         </div>
 
@@ -192,9 +170,9 @@ const Header = () => {
                   {item.name}
                 </Link>
               ))}
-              {user && (
+              {isAuthenticated && user && (
                 <div className="text-sm text-gray-600 py-2 px-3 border-t border-gray-100">
-                  Logged in as: {user.user_metadata.full_name || user.email}
+                  Logged in as: {user.name || user.email?.split('@')[0]}
                 </div>
               )}
               <div className="flex flex-col space-y-2 pt-3 border-t border-gray-100">
