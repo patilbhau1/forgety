@@ -58,8 +58,10 @@ const ProjectSetup = () => {
       setIsProcessing(true);
       const token = localStorage.getItem("token");
       
-      // First create a project entry
+      // Import getApiBase once at the beginning
       const { getApiBase } = await import("@/lib/env");
+      
+      // First create a project entry
       const projectResponse = await fetch(`${getApiBase()}/create-project-idea`, {
         method: "POST",
         headers: {
@@ -81,7 +83,6 @@ const ProjectSetup = () => {
       const formData = new FormData();
       formData.append("file", uploadedFile);
       
-      const { getApiBase } = await import("@/lib/env");
       const uploadResponse = await fetch(
         `${getApiBase()}/upload-synopsis/${projectData.project_id}`,
         {
