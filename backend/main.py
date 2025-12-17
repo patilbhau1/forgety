@@ -188,9 +188,9 @@ def init_db():
         
         # Create plans
         plans_data = [
-            ("basic_plan", "Basic Plan", "Perfect for simple projects", 5000, "Synopsis writing,Basic support,1 project", 0, 1, "Basic", datetime.now().isoformat()),
-            ("standard_plan", "Standard Plan", "Most popular choice", 12000, "Full project development,Standard support,3 projects,Blog included", 1, 3, "Standard", datetime.now().isoformat()),
-            ("premium_plan", "Premium Plan", "Complete solution with premium features", 25000, "Complete project suite,Premium support,Unlimited projects,Blog included,Priority delivery", 1, -1, "Premium", datetime.now().isoformat())
+            ("basic_plan", "Basic Plan", "Perfect for simple projects", 1000, "Synopsis writing,Basic support,1 project", 0, 1, "Basic", datetime.now().isoformat()),
+            ("standard_plan", "Standard Plan", "Most popular choice", 5000, "Full project development,Standard support,3 projects,Blog included", 1, 3, "Standard", datetime.now().isoformat()),
+            ("premium_plan", "Premium Plan", "Complete solution with premium features", 9000, "Complete project suite,Premium support,Unlimited projects,Blog included,Priority delivery", 1, -1, "Premium", datetime.now().isoformat())
         ]
         
         for plan in plans_data:
