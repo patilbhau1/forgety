@@ -118,6 +118,15 @@ const Login = () => {
               </form>
             </CardContent>
           </Card>
+          <div className="text-center text-sm">
+            <span className="text-gray-600">Don't have an account account? </span>
+            <button 
+              onClick={() => navigate('/signup')}
+              className="text-blue-600 hover:text-blue-500 font-medium"
+            >
+              register
+            </button>
+          </div>
         </div>
       </div>
 

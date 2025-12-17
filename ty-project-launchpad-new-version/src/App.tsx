@@ -51,7 +51,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
         state={{ 
           from: location.pathname !== '/login' ? location : '/' 
         }} 
-        replace 
+        replace
       />
     );
   }
@@ -69,7 +69,6 @@ const protectedRoutes = [
   { path: '/select-plan', element: <PlanSelection /> },
   { path: '/project-setup', element: <ProjectSetup /> },
   { path: '/request-admin-help', element: <RequestAdminHelp /> },
-  { path: '/choose-idea-path', element: <ChooseIdeaPath /> },
   { path: '/approved-idea', element: <ApprovedIdeaPage /> },
 ];
 
@@ -116,6 +115,7 @@ const AppContent = () => {
         <Route path="/past-work" element={<PastWork />} />
         <Route path="/idea-generator" element={<IdeaGenerator />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/choose-idea-path" element={<ChooseIdeaPath />} />
         
         {/* Protected routes */}
         <Route path="/dashboard" element={

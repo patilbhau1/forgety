@@ -38,6 +38,7 @@ const Header = () => {
 
   const navItems = [
     { name: "Home", path: "/" },
+    {name: "synopsis" , path: "/synopsis"},
     { name: "Projects", path: "/projects" },
     { name: "Past Work", path: "/past-work" },
     { name: "Idea Generator", path: "/idea-generator" },
@@ -186,7 +187,7 @@ const Header = () => {
                     Sign Out
                   </Button>
                 ) : (
-                  <div className="text-sm text-gray-600 py-2 px-3">
+                  <div className="text-sm bg-neutral-300 rounded-md text-gray-900 py-2 px-3">
                     <Link to="/login" onClick={() => setIsMenuOpen(false)} className="text-blue-600 hover:text-blue-500">
                       Log In
                     </Link>

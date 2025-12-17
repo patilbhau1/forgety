@@ -382,9 +382,9 @@ const Dashboard = () => {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* Upload Synopsis */}
-              <div className="md:col-span-2 lg:col-span-4">
+              <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Upload Your Synopsis (PDF)</label>
-                <div className="flex gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <input
                     type="file"
                     accept=".pdf"
@@ -435,12 +435,6 @@ const Dashboard = () => {
               >
                 <Video className="w-8 h-8 mb-3" />
                 <span className="font-medium">Book Meet</span>
-              </Button>
-
-              {/* Settings */}
-              <Button variant="outline" className="h-auto p-6 flex-col">
-                <Settings className="w-8 h-8 mb-3" />
-                <span className="font-medium">Settings</span>
               </Button>
             </div>
           </CardContent>

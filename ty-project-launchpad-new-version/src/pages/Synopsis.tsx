@@ -69,7 +69,7 @@ const Synopsis = () => {
             <CardTitle>Upload New Synopsis</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <input
                 type="file"
                 accept=".pdf"
