@@ -21,6 +21,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { getApiBase } from "@/lib/env";
 const API_BASE = getApiBase();
 
+const whatsappNumber = "917506750982";
+
 // Helper: Get JWT token from localStorage
 const getToken = () => localStorage.getItem("token");
 
@@ -425,13 +427,10 @@ const Dashboard = () => {
               <Button 
                 variant="outline" 
                 className="h-auto p-6 flex-col"
-                onClick={async () => {
-                  try {
-                    await apiCall("/meetings/book", { method: "POST" });
-                    alert("Meeting booked successfully!");
-                  } catch (error) {
-                    alert("Failed to book meeting");
-                  }
+                onClick={() => {
+                  const message = "Hi, I would like to book a meeting. Please let me know your availability.";
+                  const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+                  window.open(url, "_blank");
                 }}
               >
                 <Video className="w-8 h-8 mb-3" />

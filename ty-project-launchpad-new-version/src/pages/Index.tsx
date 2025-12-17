@@ -17,10 +17,9 @@ import {
   Wifi
 } from "lucide-react";
 import { useState, useEffect } from "react";
-import { motion, useAnimation, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { motion, useAnimation } from 'framer-motion';
 
-import Chatbot from "@/components/Chatbot";
+
 
 const Index = () => {
   interface Plan {
@@ -33,54 +32,12 @@ const Index = () => {
     highlighted?: boolean;
   }
 
-  const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
-  const [isChatbotOpen, setIsChatbotOpen] = useState(false);
-  
-  // Ref for featured projects scroll animation
-  const featuredProjectsRef = useRef(null);
-  const isInView = useInView(featuredProjectsRef, { once: true, margin: "-100px" });
+  const whatsappNumber = "917506750982";
 
   const handleSelectPlan = (plan: Plan) => {
-    setSelectedPlan(plan);
-    setIsChatbotOpen(true);
-  };
-
-  const handleCloseChatbot = () => {
-    setIsChatbotOpen(false);
-    setSelectedPlan(null);
-  };
-
-  const handleFinalize = (messages) => {
-    try {
-      // Extract the conversation summary from the last system message if available
-      const lastMessage = messages[messages.length - 1];
-      const summary = lastMessage?.role === 'system' ? lastMessage.content : 
-        messages.map(msg => `${msg.role}: ${msg.content}`).join('\n');
-      
-      const hardwareNumber = "917506750982";
-      const softwareNumber = "918828016278";
-      const planType = selectedPlan?.name?.toLowerCase().includes('software') ? 'software' : 'hardware';
-      const number = planType === 'software' ? softwareNumber : hardwareNumber;
-      
-      // Create a more structured WhatsApp message
-      const projectTitle = selectedPlan?.name || 'Project';
-      const whatsappMessage = `*New ${projectTitle} Inquiry*\n\n${summary}\n\n[This message was generated from the tyforge]`;
-      
-      const url = `https://wa.me/${number}?text=${encodeURIComponent(whatsappMessage)}`;
-      
-      // Open in a new tab
-      window.open(url, '_blank');
-      
-      // Close the chatbot after a short delay
-      setTimeout(() => {
-        handleCloseChatbot();
-      }, 500);
-    } catch (error) {
-      console.error('Error finalizing chat:', error);
-      // Fallback in case of error
-      alert('Failed to open WhatsApp. Please try again or contact support.');
-      handleCloseChatbot();
-    }
+    const message = `Hi, I have selected the ${plan.name} with the price of ${plan.price} and want to go ahead with this plan. Please create a meeting in this regard ASAP.`;
+    const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+    window.open(url, "_blank");
   };
   const features = [
     {
@@ -384,13 +341,10 @@ const Index = () => {
       </section>
 
       {/* Featured Projects */}
-      <section ref={featuredProjectsRef} className="py-12 sm:py-16 md:py-20 bg-gray-50">
+      <section className="py-12 sm:py-16 md:py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
             className="text-center mb-12 sm:mb-16"
-            initial={{ opacity: 0, y: 50 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-            transition={{ duration: 0.6 }}
           >
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
               Ready Made Projects
@@ -404,22 +358,6 @@ const Index = () => {
             {projectTypes.map((project, index) => (
               <motion.div
                 key={project.id}
-                initial={{ 
-                  opacity: 0, 
-                  x: index % 2 === 0 ? -100 : 100 
-                }}
-                animate={isInView ? { 
-                  opacity: 1, 
-                  x: 0 
-                } : { 
-                  opacity: 0, 
-                  x: index % 2 === 0 ? -100 : 100 
-                }}
-                transition={{ 
-                  duration: 0.8, 
-                  delay: index * 0.2,
-                  ease: "easeOut" 
-                }}
                 whileHover={{ scale: 1.03, y: -5 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -620,15 +558,7 @@ const Index = () => {
       </section>
 
       <Footer />
-      {isChatbotOpen && selectedPlan && (
-        <div className="fixed inset-0 z-50">
-          <Chatbot
-            plan={selectedPlan}
-            onClose={handleCloseChatbot}
-            onFinalize={handleFinalize}
-          />
-        </div>
-      )}
+
     </div>
   );
 };
