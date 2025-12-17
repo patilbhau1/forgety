@@ -3,6 +3,15 @@ import Header from "@/components/Header";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { 
   User as UserIcon, 
   Mail, 
@@ -146,28 +155,7 @@ const Dashboard = () => {
     }
   };
 
-  const handleBlackBookDownload = async () => {
-    try {
-      const token = getToken();
-      const res = await fetch(`${API_BASE}/blackbook/download`, {
-        method: "GET",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-        },
-      });
-
-      if (!res.ok) throw new Error("Download failed");
-      
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'BlackBook.pdf';
-      a.click();
-    } catch (error) {
-      alert('Error downloading black book: ' + (error as Error).message);
-    }
-  };
+  const [isBlackBookNoticeOpen, setIsBlackBookNoticeOpen] = useState(false);
 
   const handleSaveProfile = async () => {
     try {
@@ -417,7 +405,7 @@ const Dashboard = () => {
               <Button 
                 variant="outline" 
                 className="h-auto p-6 flex-col"
-                onClick={handleBlackBookDownload}
+                onClick={() => setIsBlackBookNoticeOpen(true)}
               >
                 <Book className="w-8 h-8 mb-3" />
                 <span className="font-medium">Black Book</span>
@@ -444,6 +432,31 @@ const Dashboard = () => {
       
       {/* Bottom spacing for better UX */}
       <div className="h-16 sm:h-20"></div>
+
+      <AlertDialog open={isBlackBookNoticeOpen} onOpenChange={setIsBlackBookNoticeOpen}  >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Introducing Black Book AI</AlertDialogTitle>
+            <AlertDialogDescription>
+              <p className="mb-4 text-red-600">
+                (coming soon)
+              </p>
+              <p className="mb-4">
+                Unlock the full potential of your project documentation with Black Book AI. Simply upload your college's reference black book, your project synopsis, and your project's source code (`.zip`).
+              </p>
+              <p className="mb-4">
+                Our AI will generate ready-to-paste content for your black book, including all necessary diagrams like Data Flow, Class, and Sequence diagrams.
+              </p>
+              <p>
+                You can regenerate chapters and diagrams multiple times to get them just right. All this for just <span className="bg-blue-600 text-white p-1 rounded">₹199/month</span>.
+              </p>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction>Continue</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
