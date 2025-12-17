@@ -79,23 +79,35 @@ const ProjectSetup = () => {
       
       const projectData = await projectResponse.json();
       
-      // Upload the synopsis file
-      const formData = new FormData();
-      formData.append("file", uploadedFile);
+      // Upload the synopsis file to existing endpoint (kept for backward compatibility)
+      const formDataSynopsis = new FormData();
+      formDataSynopsis.append("file", uploadedFile);
       
-      const uploadResponse = await fetch(
+      const uploadSynopsisResp = await fetch(
         `${getApiBase()}/upload-synopsis/${projectData.project_id}`,
         {
           method: "POST",
           headers: {
             "Authorization": `Bearer ${token}`,
           },
-          body: formData,
+          body: formDataSynopsis,
         }
       );
 
-      if (!uploadResponse.ok) throw new Error("Failed to upload synopsis");
-      
+      if (!uploadSynopsisResp.ok) throw new Error("Failed to upload synopsis (upload-synopsis)");
+
+      // Additionally call /uploads then /upload with the binary file (file only)
+      const formDataUploads = new FormData();
+      formDataUploads.append("file", uploadedFile);
+      const uploadsResp = await fetch(`${getApiBase()}/synopsis/upload`, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        },
+        body: formDataUploads,
+      });
+      if (!uploadsResp.ok) throw new Error("Failed to register upload (uploads)");
+
       toast({
         title: "Success",
         description: "Synopsis uploaded successfully! Redirecting to dashboard...",
