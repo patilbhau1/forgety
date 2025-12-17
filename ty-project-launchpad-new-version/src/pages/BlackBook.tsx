@@ -3,7 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Book, Download } from "lucide-react";
 
-const API_BASE = "https://newtyforge.onrender.com/api";
+import { getApiBase } from "@/lib/env";
+const API_BASE = getApiBase();
 const getToken = () => localStorage.getItem("tyforge_token");
 
 const BlackBook = () => {

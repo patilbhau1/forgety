@@ -59,7 +59,8 @@ const ProjectSetup = () => {
       const token = localStorage.getItem("token");
       
       // First create a project entry
-      const projectResponse = await fetch("https://newtyforge.onrender.com/api/create-project-idea", {
+      const { getApiBase } = await import("@/lib/env");
+      const projectResponse = await fetch(`${getApiBase()}/create-project-idea`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -80,8 +81,9 @@ const ProjectSetup = () => {
       const formData = new FormData();
       formData.append("file", uploadedFile);
       
+      const { getApiBase } = await import("@/lib/env");
       const uploadResponse = await fetch(
-        `https://newtyforge.onrender.com/api/upload-synopsis/${projectData.project_id}`,
+        `${getApiBase()}/upload-synopsis/${projectData.project_id}`,
         {
           method: "POST",
           headers: {
@@ -127,7 +129,8 @@ const ProjectSetup = () => {
       setIsProcessing(true);
       const token = localStorage.getItem("token");
       
-      const response = await fetch("https://newtyforge.onrender.com/api/create-project-idea", {
+      const { getApiBase } = await import("@/lib/env");
+      const response = await fetch(`${getApiBase()}/create-project-idea`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

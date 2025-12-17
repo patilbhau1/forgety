@@ -18,7 +18,8 @@ import {
 } from "lucide-react";
 import { supabase } from '@/integrations/supabase/client';
 
-const API_BASE = "https://newtyforge.onrender.com/api";
+import { getApiBase } from "@/lib/env";
+const API_BASE = getApiBase();
 
 // Helper: Get JWT token from localStorage
 const getToken = () => localStorage.getItem("token");

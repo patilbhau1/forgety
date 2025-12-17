@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { getBackendOrigin } from './env';
 
-const API_BASE_URL = 'https://newtyforge.onrender.com';
+const API_BASE_URL = getBackendOrigin();
 
 const api = axios.create({
   baseURL: API_BASE_URL,

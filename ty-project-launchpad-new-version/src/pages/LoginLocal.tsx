@@ -6,7 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-const API_BASE = "https://newtyforge.onrender.com/api";
+import { getApiBase } from "@/lib/env";
+const API_BASE = getApiBase();
 
 const LoginLocal = () => {
   const [isLoading, setIsLoading] = useState(false);

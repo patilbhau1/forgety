@@ -34,7 +34,8 @@ const Signup = () => {
       setIsLoading(true);
       
       // Create user using our backend API
-      const response = await fetch("https://newtyforge.onrender.com/api/signup", {
+      const { getApiBase } = await import("@/lib/env");
+      const response = await fetch(`${getApiBase()}/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password, name, phone }),

@@ -33,7 +33,8 @@ const PlanSelection = () => {
   const fetchPlans = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("https://newtyforge.onrender.com/api/plans", {
+      const API_BASE = (await import("@/lib/env")).getApiBase();
+      const response = await fetch(`${API_BASE}/plans`, {
         headers: {
           "Authorization": `Bearer ${token}`,
         },
@@ -68,7 +69,8 @@ const PlanSelection = () => {
       setIsProcessing(true);
       const token = localStorage.getItem("token");
       
-      const response = await fetch("https://newtyforge.onrender.com/api/select-plan", {
+      const API_BASE = (await import("@/lib/env")).getApiBase();
+      const response = await fetch(`${API_BASE}/select-plan`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
